@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>আমাদের দোস্তরা 😎💖</title>
+<style>
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: linear-gradient(120deg, #ff9a9e, #fad0c4, #a1c4fd, #c2e9fb);
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+  font-family: Arial, sans-serif;
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+}
+
+@keyframes gradientBG {
+  0% {background-position:0% 50%;}
+  50% {background-position:100% 50%;}
+  100% {background-position:0% 50%;}
+}
+
+h1 {
+  position: absolute;
+  top: 20px;
+  width: 100%;
+  text-align: center;
+  color: #fff;
+  text-shadow: 2px 2px 10px #000;
+  z-index: 2;
+}
+
+/* Photos */
+.photo {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 0 15px rgba(0,0,0,0.5);
+  cursor: pointer;
+  animation: floatRandom 8s linear infinite;
+  transform-origin: center;
+}
+.photo img {width:100%; height:100%; object-fit:cover;}
+
+@keyframes floatRandom {
+  0%   {transform: translate(0px,0px) scale(1) rotate(0deg);}
+  25%  {transform: translate(calc(var(--x1)), calc(var(--y1))) scale(1.1) rotate(15deg);}
+  50%  {transform: translate(calc(var(--x2)), calc(var(--y2))) scale(0.9) rotate(-10deg);}
+  75%  {transform: translate(calc(var(--x3)), calc(var(--y3))) scale(1.05) rotate(10deg);}
+  100% {transform: translate(0px,0px) scale(1) rotate(0deg);}
+}
+
+/* Overlay panel */
+#overlay {
+  display: none;
+  position: fixed;
+  top:0; left:0;
+  width:100vw;
+  height:100vh;
+  background: rgba(0,0,0,0.9);
+  z-index: 999;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+#overlay img {
+  max-width: 80%;
+  max-height: 80%;
+  border-radius: 15px;
+  box-shadow:0 0 30px rgba(255,255,255,0.7);
+  animation: overlayFloat 5s ease-in-out infinite;
+}
+
+@keyframes overlayFloat {
+  0%,100% {transform: scale(1) rotate(0deg);}
+  25% {transform: scale(1.05) rotate(5deg);}
+  50% {transform: scale(0.95) rotate(-5deg);}
+  75% {transform: scale(1.05) rotate(5deg);}
+}
+
+#backBtn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  padding: 10px 20px;
+  font-weight: bold;
+  border:none;
+  border-radius:50px;
+  cursor:pointer;
+  background: rgba(255,255,255,0.7);
+  z-index:1000;
+  box-shadow:0 0 10px rgba(0,0,0,0.5);
+}
+#backBtn:hover {background: rgba(255,255,255,1);}
+
+/* Hearts overlay */
+.overlayHeart {
+  position: absolute;
+  width: 20px; height: 20px;
+  background: red;
+  transform: rotate(45deg);
+  pointer-events:none;
+  z-index:1;
+  animation: floatHeart linear forwards;
+}
+.overlayHeart::before,
+.overlayHeart::after {
+  content:"";
+  position:absolute;
+  width:20px;height:20px;
+  background:red;
+  border-radius:50%;
+}
+.overlayHeart::before {top:-10px; left:0;}
+.overlayHeart::after {left:10px; top:0;}
+
+@keyframes floatHeart {
+  0% {transform: translateX(0) translateY(0) rotate(45deg) scale(1); opacity:1;}
+  100% {transform: translateX(var(--x)) translateY(var(--y)) rotate(45deg) scale(0.5); opacity:0;}
+}
+
+/* Music button */
+.music-btn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: rgba(255,255,255,0.7);
+  border: none;
+  border-radius: 50px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-weight: bold;
+  z-index: 2;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  transition: background 0.3s;
+}
+.music-btn:hover {background: rgba(255,255,255,1);}
+</style>
+</head>
+<body>
+
+<h1>আমাদের দোস্তরা 😎💖</h1>
+
+<audio id="bgMusic" autoplay loop>
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio>
+<button class="music-btn" onclick="toggleMusic()">Pause Music ⏸️</button>
+
+<div id="overlay">
+  <button id="backBtn">Back ⬅️</button>
+  <img src="" id="overlayImg">
+</div>
+
+<script>
+const music = document.getElementById('bgMusic');
+const btn = document.querySelector('.music-btn');
+function toggleMusic(){
+  if(music.paused){ music.play(); btn.textContent="Pause Music ⏸️"; }
+  else { music.pause(); btn.textContent="Play Music ▶️"; }
+}
+
+const images = [
+    "https://raw.githubusercontent.com/amin8931000-ship-it/Frinds/main/1.jpeg",
+  "https://raw.githubusercontent.com/amin8931000-ship-it/Frinds/main/2.jpeg",
+  "https://raw.githubusercontent.com/amin8931000-ship-it/Frinds/main/3.jpeg",
+  "https://raw.githubusercontent.com/amin8931000-ship-it/Frinds/main/4.jpeg",
+  "https://raw.githubusercontent.com/amin8931000-ship-it/Frinds/main/5.jpeg",
+  "https://raw.githubusercontent.com/amin8931000-ship-it/Frinds/main/6.jpeg",
+  "https://raw.githubusercontent.com/amin8931000-ship-it/Frinds/main/7.jpeg",
+  "https://raw.githubusercontent.com/amin8931000-ship-it/Frinds/main/8.jpeg",
+  "https://raw.githubusercontent.com/amin8931000-ship-it/Frinds/main/9.jpeg",
+  "https://raw.githubusercontent.com/amin8931000-ship-it/Frinds/main/10.jpeg",
+  "https://raw.githubusercontent.com/amin8931000-ship-it/Frinds/main/11.jpeg",
+  "https://raw.githubusercontent.com/amin8931000-ship-it/Frinds/main/12.jpeg",
+  "https://raw.githubusercontent.com/amin8931000-ship-it/Frinds/main/13.jpeg",
+  "https://raw.githubusercontent.com/amin8931000-ship-it/Frinds/main/14.jpeg",
+  "https://raw.githubusercontent.com/amin8931000-ship-it/Frinds/main/15.jpeg",
+  "https://raw.githubusercontent.com/amin8931000-ship-it/Frinds/main/16.jpeg",
+  "https://raw.githubusercontent.com/amin8931000-ship-it/Frinds/main/17.jpeg",
+  "https://raw.githubusercontent.com/amin8931000-ship-it/Frinds/main/18.jpeg",
+  "https://raw.githubusercontent.com/amin8931000-ship-it/Frinds/main/19.jpeg",
+  "https://raw.githubusercontent.com/amin8931000-ship-it/Frinds/main/20.jpeg",
+  "https://raw.githubusercontent.com/amin8931000-ship-it/Frinds/main/21.jpeg",
+  "https://raw.githubusercontent.com/amin8931000-ship-it/Frinds/main/22.jpeg",
+  "https://raw.githubusercontent.com/amin8931000-ship-it/Frinds/main/23.jpeg",
+  "https://raw.githubusercontent.com/amin8931000-ship-it/Frinds/main/24.jpeg"
+  // add more
+];
+
+// main photos
+images.forEach((src)=>{
+  const div = document.createElement('div');
+  div.className='photo';
+  div.innerHTML=`<img src="${src}">`;
+
+  div.style.setProperty('--x1',(Math.random()*200-100)+'px');
+  div.style.setProperty('--y1',(Math.random()*200-100)+'px');
+  div.style.setProperty('--x2',(Math.random()*300-150)+'px');
+  div.style.setProperty('--y2',(Math.random()*300-150)+'px');
+  div.style.setProperty('--x3',(Math.random()*400-200)+'px');
+  div.style.setProperty('--y3',(Math.random()*400-200)+'px');
+
+  div.style.left=Math.random()*(window.innerWidth-150)+'px';
+  div.style.top=Math.random()*(window.innerHeight-150)+'px';
+  div.style.animationDuration=(5+Math.random()*5)+'s';
+
+  // click to open overlay
+  div.onclick = ()=>{
+    showOverlay(src);
+  };
+
+  document.body.appendChild(div);
+});
+
+// overlay
+const overlay=document.getElementById('overlay');
+const overlayImg=document.getElementById('overlayImg');
+const backBtn=document.getElementById('backBtn');
+let overlayIndex=0;
+let overlayInterval;
+
+function showOverlay(src){
+  overlay.style.display='flex';
+  overlayImg.src=src;
+  overlayIndex=images.indexOf(src);
+
+  // auto change every 3 sec
+  overlayInterval=setInterval(()=>{
+    overlayIndex=(overlayIndex+1)%images.length;
+    overlayImg.src=images[overlayIndex];
+  },3000);
+  // start hearts
+  startOverlayHearts();
+}
+
+backBtn.onclick=()=>{
+  overlay.style.display='none';
+  clearInterval(overlayInterval);
+}
+
+// hearts overlay
+function startOverlayHearts(){
+  setInterval(()=>{
+    const heart=document.createElement('div');
+    heart.className='overlayHeart';
+    const x=(Math.random()-0.5)*window.innerWidth;
+    const y=-Math.random()*300-50;
+    heart.style.setProperty('--x',x+'px');
+    heart.style.setProperty('--y',y+'px');
+    heart.style.left=Math.random()*window.innerWidth+'px';
+    heart.style.top=window.innerHeight+'px';
+    heart.style.animationDuration=(5+Math.random()*5)+'s';
+    overlay.appendChild(heart);
+    setTimeout(()=>heart.remove(),10000);
+  },300);
+}
+
+</script>
+</body>
+</html>
