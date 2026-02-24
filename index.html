@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ALAMIN KHATIAL PHOTO Gallery</title>
+<style>
+body{
+  margin:0;
+  font-family:sans-serif;
+  background:#0f2027;
+  color:white;
+  overflow-x:hidden;
+}
+h1{
+  text-align:center;
+  padding:20px;
+  font-size:2rem;
+  text-shadow:0 0 10px #00f5ff;
+  margin-top:80px; /* Space for music controls */
+}
+
+/* ===== Music Controls (Responsive) ===== */
+#musicControls{
+  background:rgba(0,0,0,0.6);
+  border-radius:30px;
+  padding:10px 15px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  z-index:1000;
+  position:fixed;
+  top:10px;
+  left:50%;
+  transform:translateX(-50%);
+  color:white;
+  font-family:sans-serif;
+  justify-content:center;
+  flex-wrap:wrap; /* Wrap on small screens */
+  max-width:95vw;
+}
+#musicControls button{
+  cursor:pointer;
+  border:none;
+  padding:6px 10px;
+  border-radius:15px;
+  background:rgba(0,255,255,0.2);
+  color:white;
+  font-weight:bold;
+  transition:0.3s;
+  flex-shrink:0;
+  font-size:0.9rem;
+}
+#musicControls button:hover{background:rgba(0,255,255,0.4);}
+#musicSlider{
+  cursor:pointer;
+  flex:1 1 150px; /* allow slider to shrink/grow */
+  max-width:200px;
+}
+
+/* ===== Gallery ===== */
+.gallery{
+  column-count:4;
+  column-gap:20px;
+  padding:30px;
+}
+@media(max-width:1200px){ .gallery{column-count:3;} }
+@media(max-width:800px){ .gallery{column-count:2;} }
+@media(max-width:500px){ .gallery{column-count:1;} }
+
+.box{
+  display:inline-block;
+  width:100%;
+  margin-bottom:20px;
+  border-radius:20px;
+  overflow:hidden;
+  cursor:pointer;
+  background:rgba(255,255,255,0.05);
+  backdrop-filter:blur(10px);
+  border:2px solid rgba(0,255,255,0.5);
+  box-shadow:0 0 10px rgba(0,255,255,0.3);
+  transition:transform 0.4s, box-shadow 0.4s, border-color 0.5s;
+  animation: neonBorder 3s linear infinite alternate;
+}
+.box img{
+  width:100%;
+  display:block;
+  border-radius:20px;
+  transition:transform 0.4s;
+}
+.box:hover{
+  transform:scale(1.05);
+  box-shadow:0 0 40px #ff00ff;
+}
+@keyframes neonBorder {
+  0% { border-color: rgba(0,255,255,0.6); box-shadow:0 0 10px rgba(0,255,255,0.4),0 0 20px rgba(255,0,255,0.3),0 0 30px rgba(255,255,0,0.2); transform: translate(0px, 0px) rotate(0deg);}
+  15%{ border-color: rgba(0,255,0,0.7); box-shadow:3px -2px 15px rgba(0,255,0,0.5),-3px 3px 20px rgba(255,0,255,0.4),0 -3px 25px rgba(255,255,0,0.3); transform: translate(2px,-3px) rotate(1deg);}
+  30%{ border-color: rgba(255,165,0,0.8); box-shadow:-4px 2px 20px rgba(255,165,0,0.5),4px -2px 15px rgba(0,255,255,0.4),0 3px 25px rgba(255,0,255,0.3); transform: translate(-2px,2px) rotate(-1deg);}
+  50%{ border-color: rgba(255,0,255,0.9); box-shadow:5px 0px 25px rgba(255,0,255,0.5),-5px 5px 20px rgba(0,255,255,0.4),0 -5px 30px rgba(255,255,0,0.3); transform: translate(3px,1px) rotate(2deg);}
+  70%{ border-color: rgba(0,255,255,0.7); box-shadow:-3px -4px 20px rgba(0,255,255,0.5),4px 3px 25px rgba(255,0,255,0.4),0 5px 15px rgba(255,255,0,0.3); transform: translate(-3px,-2px) rotate(-2deg);}
+  85%{ border-color: rgba(255,255,0,0.8); box-shadow:2px 3px 25px rgba(255,255,0,0.5),-2px -3px 20px rgba(255,0,255,0.4),0 0 30px rgba(0,255,255,0.3); transform: translate(1px,2px) rotate(1deg);}
+  100%{ border-color: rgba(0,255,255,0.6); box-shadow:0 0 10px rgba(0,255,255,0.4),0 0 20px rgba(255,0,255,0.3),0 0 30px rgba(255,255,0,0.2); transform: translate(0px,0px) rotate(0deg);}
+}
+
+/* ===== View Panel ===== */
+#viewPanel{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.95);
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  z-index:999;
+}
+#viewPanel img{
+  max-width:90%;
+  max-height:75%;
+  border-radius:20px;
+  box-shadow:0 0 30px #00f5ff;
+}
+#backBtn{
+  margin-top:20px;
+  padding:12px 25px;
+  border:none;
+  border-radius:50px;
+  cursor:pointer;
+  background:rgba(255,255,255,0.8);
+  font-weight:bold;
+  color:#0f2027;
+  box-shadow:0 0 15px #ff00ff;
+  transition:0.3s;
+}
+#backBtn:hover{background:#fff;}
+
+/* ===== Particle ===== */
+.particle{
+  position:fixed;
+  width:4px;
+  height:4px;
+  border-radius:50%;
+  pointer-events:none;
+  opacity:0.8;
+  background:cyan;
+  animation:floatParticle linear forwards;
+}
+@keyframes floatParticle{
+  to{
+    transform:translate(var(--x),var(--y));
+    opacity:0;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- Music Controls Fixed Top -->
+<div id="musicControls">
+  <button id="prevBtn">⏮</button>
+  <button id="playPauseBtn">▶️</button>
+  <button id="nextBtn">⏭</button>
+  <span id="currentTime">0:00</span>
+  <input type="range" id="musicSlider" min="0" max="100" value="0" style="width:200px;">
+  <span id="durationTime">0:00</span>
+  <button id="loopBtn">🔁</button>
+</div>
+
+<h1>ALAMIN KHATIAL PHOTO Gallery</h1>
+
+<audio id="bgMusic" autoplay></audio>
+
+<div class="gallery" id="gallery"></div>
+
+<div id="viewPanel">
+  <img id="viewImg">
+  <button id="backBtn">Back</button>
+</div>
+
+<script>
+// ===== Gallery =====
+const gallery=document.getElementById("gallery");
+const viewPanel=document.getElementById("viewPanel");
+const viewImg=document.getElementById("viewImg");
+const backBtn=document.getElementById("backBtn");
+
+const images=[];
+for(let i=1;i<=24;i++){
+  images.push(`https://raw.githubusercontent.com/amin8931000-ship-it/Frinds/main/${i}.jpeg`);
+}
+images.forEach(src=>{
+  const div=document.createElement("div");
+  div.className="box";
+  const img=document.createElement("img");
+  img.src=src;
+  img.style.height=(200+Math.random()*200)+"px";
+  div.appendChild(img);
+  div.onclick=(e)=>{
+    viewPanel.style.display="flex";
+    viewImg.src=src;
+    createParticles(window.innerWidth/2,window.innerHeight/2);
+  };
+  gallery.appendChild(div);
+});
+backBtn.onclick=()=>viewPanel.style.display="none";
+
+// ===== Particle =====
+function createParticles(x,y){
+  for(let i=0;i<25;i++){
+    const p=document.createElement("div");
+    p.className="particle";
+    p.style.left=x+"px";
+    p.style.top=y+"px";
+    p.style.setProperty('--x',(Math.random()-0.5)*200+"px");
+    p.style.setProperty('--y',(Math.random()-0.5)*200+"px");
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(),1000);
+  }
+}
+
+// ===== Music System (GitHub raw links) =====
+const musicTracks=[];
+for(let i=1;i<=24;i++){
+  musicTracks.push(`https://www.soundhelix.com/examples/mp3/SoundHelix-Song-${i}.mp3`);
+}
+
+let currentTrack = 0;
+const music = document.getElementById("bgMusic");
+const playPauseBtn = document.getElementById("playPauseBtn");
+const prevBtn = document.getElementById("prevBtn");
+const nextBtn = document.getElementById("nextBtn");
+const currentTimeLabel = document.getElementById("currentTime");
+const durationLabel = document.getElementById("durationTime");
+const musicSlider = document.getElementById("musicSlider");
+const loopBtn = document.getElementById("loopBtn");
+
+// Set initial track
+music.src = musicTracks[currentTrack];
+music.loop = true;
+
+// ===== Functions =====
+function updatePlayPauseIcon() {
+  playPauseBtn.textContent = music.paused ? "▶️" : "⏸";
+}
+
+// Play/Pause Toggle
+playPauseBtn.onclick = () => {
+  if(music.paused) music.play();
+  else music.pause();
+  updatePlayPauseIcon();
+};
+
+// Prev / Next Track
+prevBtn.onclick = () => {
+  currentTrack = (currentTrack - 1 + musicTracks.length) % musicTracks.length;
+  music.src = musicTracks[currentTrack];
+  music.play();
+  updatePlayPauseIcon();
+};
+nextBtn.onclick = () => {
+  currentTrack = (currentTrack + 1) % musicTracks.length;
+  music.src = musicTracks[currentTrack];
+  music.play();
+  updatePlayPauseIcon();
+};
+
+// Loop Toggle
+loopBtn.onclick = () => {
+  music.loop = !music.loop;
+  loopBtn.style.color = music.loop ? "cyan" : "white";
+};
+
+// Update Time & Slider
+music.ontimeupdate = () => {
+  let curr = Math.floor(music.currentTime);
+  let dur = Math.floor(music.duration) || 0;
+  currentTimeLabel.textContent = Math.floor(curr/60) + ":" + (curr%60).toString().padStart(2,'0');
+  durationLabel.textContent = Math.floor(dur/60) + ":" + (dur%60).toString().padStart(2,'0');
+  if(dur) musicSlider.value = (curr/dur)*100;
+};
+
+// Slider Seek
+musicSlider.oninput = () => {
+  if(music.duration) music.currentTime = (musicSlider.value/100) * music.duration;
+};
+
+// Auto update play/pause icon on load
+music.onplay = updatePlayPauseIcon;
+music.onpause = updatePlayPauseIcon;
+
+// Set loop button initial color
+loopBtn.style.color = music.loop ? "cyan" : "white";
+</script>
+
+</body>
+</html>
